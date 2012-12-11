@@ -1,0 +1,181 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: image-protector\n"
+"POT-Creation-Date: 2012-12-11 18:51+0900\n"
+"PO-Revision-Date: 2012-12-11 18:52+0900\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: japanese\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e\n"
+"X-Poedit-Basepath: C:\\pleiades\\xampp\\htdocs\\wordpress\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: wp-content\\plugins\\image-protector\n"
+
+#: wp-content\plugins\image-protector/image-protector.php:911
+#: wp-content\plugins\image-protector/image-protector.php:912
+msgid "Image Protector"
+msgstr "画像保護"
+
+#: wp-content\plugins\image-protector/image-protector.php:924
+msgid "Docs"
+msgstr "ドキュメント"
+
+#: wp-content\plugins\image-protector/image-protector.php:930
+msgid "Support"
+msgstr "サポート"
+
+#: wp-content\plugins\image-protector/image-protector.php:996
+msgid "write error"
+msgstr "書き込み失敗"
+
+#: wp-content\plugins\image-protector/image-protector.php:1140
+msgid "use .htaccess"
+msgstr ".htaccessで制限"
+
+#: wp-content\plugins\image-protector/image-protector.php:1152
+msgid "! As multisite, .htaccess doesn't work."
+msgstr ".htaccessによる制限はマルチサイトモードではうまく機能しません。"
+
+#: wp-content\plugins\image-protector/image-protector.php:1157
+msgid "Visual Editor doesn't work well when this function is activated."
+msgstr ".htaccessを有効にするとビジュアルエディタがまともに機能しません。"
+
+#: wp-content\plugins\image-protector/image-protector.php:1158
+msgid "You need to stop this option when you use Visual Editor."
+msgstr ""
+"ビジュアルエディタを使用する場合は一旦このオプションを停止するといいです。"
+
+#: wp-content\plugins\image-protector/image-protector.php:1159
+msgid ".htaccess file is made at wp-content directory."
+msgstr ".htaccessファイルはwp-contentディレクトリに作られます。"
+
+#: wp-content\plugins\image-protector/image-protector.php:1161
+msgid "limit range"
+msgstr "制限範囲"
+
+#: wp-content\plugins\image-protector/image-protector.php:1192
+msgid "referer check"
+msgstr "リファラーチェック"
+
+#: wp-content\plugins\image-protector/image-protector.php:1209
+msgid "user agent check"
+msgstr "ユーザーエージェントチェック"
+
+#: wp-content\plugins\image-protector/image-protector.php:1215
+msgid "block user agent(divide by Enter)"
+msgstr "はじくユーザーエージェントに含まれる文字（改行区切り）"
+
+#: wp-content\plugins\image-protector/image-protector.php:1231
+msgid "timeout check"
+msgstr "タイムアウトチェック"
+
+#: wp-content\plugins\image-protector/image-protector.php:1237
+msgid "timeout second"
+msgstr "タイムアウト秒数"
+
+#: wp-content\plugins\image-protector/image-protector.php:1241
+msgid "second"
+msgstr "秒"
+
+#: wp-content\plugins\image-protector/image-protector.php:1253
+msgid "key check"
+msgstr "キーチェック"
+
+#: wp-content\plugins\image-protector/image-protector.php:1270
+msgid "division"
+msgstr "分割"
+
+#: wp-content\plugins\image-protector/image-protector.php:1283
+msgid "The prefix of the target file."
+msgstr "処理画像ファイル名のプリフィックス"
+
+#: wp-content\plugins\image-protector/image-protector.php:1284
+msgid "Images those have this prefix are divided."
+msgstr "この文字で始まる画像ファイルを分割表示対象とします。"
+
+#: wp-content\plugins\image-protector/image-protector.php:1285
+msgid "keep it void if all images are targets."
+msgstr "全ての画像を対象にする場合は空欄にしてください。"
+
+#: wp-content\plugins\image-protector/image-protector.php:1288
+msgid "How many pieces"
+msgstr "分割数"
+
+#: wp-content\plugins\image-protector/image-protector.php:1292
+msgid "cols"
+msgstr "列"
+
+#: wp-content\plugins\image-protector/image-protector.php:1296
+msgid "rows"
+msgstr "行"
+
+#: wp-content\plugins\image-protector/image-protector.php:1309
+msgid "browser function check"
+msgstr "ブラウザ機能チェック"
+
+#: wp-content\plugins\image-protector/image-protector.php:1326
+msgid "forbid right click"
+msgstr "右クリック禁止"
+
+#: wp-content\plugins\image-protector/image-protector.php:1343
+msgid "forbid print screen"
+msgstr "プリントスクリーン防止"
+
+#: wp-content\plugins\image-protector/image-protector.php:1360
+msgid "transparent filter"
+msgstr "透明フィルター"
+
+#: wp-content\plugins\image-protector/image-protector.php:1377
+msgid "deterioration"
+msgstr "劣化処理"
+
+#: wp-content\plugins\image-protector/image-protector.php:1394
+msgid "background"
+msgstr "背景画像化"
+
+#: wp-content\plugins\image-protector/image-protector.php:1411
+msgid "media link"
+msgstr "メディアリンク"
+
+#: wp-content\plugins\image-protector/image-protector.php:1428
+msgid "js css obfuscated"
+msgstr "Javascript, CSS難読化"
+
+#: wp-content\plugins\image-protector/image-protector.php:1445
+msgid "how to display error message."
+msgstr "エラー表示"
+
+#: wp-content\plugins\image-protector/image-protector.php:1450
+msgid "recommend"
+msgstr "推奨"
+
+#: wp-content\plugins\image-protector/image-protector.php:1481
+msgid "db data"
+msgstr "設定保持情報"
+
+#: wp-content\plugins\image-protector/image-protector.php:1493
+msgid "initialize"
+msgstr "設定初期化"
+
+#: wp-content\plugins\image-protector/image-protector.php:1512
+msgid "stop"
+msgstr "停止"
+
+#: wp-content\plugins\image-protector/image-protector.php:1516
+msgid "activate"
+msgstr "有効化"
+
+#: wp-content\plugins\image-protector/image-protector.php:1549
+msgid "failure backup .htaccess"
+msgstr ".htaccessのバックアップに失敗しました。"
+
+#: wp-content\plugins\image-protector/image-protector.php:1554
+msgid "failure delete .htaccess"
+msgstr ".htaccessの削除に失敗しました。"
+
+#~ msgid "Manual"
+#~ msgstr "マニュアル"

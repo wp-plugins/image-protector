@@ -4,9 +4,39 @@ Plugin Name: Image Protector
 Plugin URI: http://wordpress.1000sei.com/image-protector/
 Description: This forbid visitor to download images.
 Author: Hirofumi Ohta
-Version: 1.0
+Version: 1.1
 Author URI: http://wordpress.1000sei.com
 */
+
+// メモ
+// galleryのショートコードをいじるならwp-includes/media.phpの800行目あたり。
+// ソース検索システムの作成←eclipseでいいと思う
+// gif分割対応←アニメとの区別の付け方が分からない
+// キャッシュさせない←キャッシュされてる形跡無し。分かってないだけかも。
+// altの指定←HTMLやSEOには影響はないはずなのでやらなくていいとおもう
+// canvasに画像を描いて防げないか？
+// IPチェック
+// キーの取得のセキュリティが脆弱じゃないか？ ←１秒パスを指定、指定されてなかったら発行とか？
+// IE8以下の淵ぼかしの方法がわからない
+// 透過gifが黒くなるのはwordpressの仕様だがなんとかしたい
+// サーバー側でフィルタ加工
+// jsででなくhtml自体を変更できるようなオプション
+// マルチサイトは困難なので保留
+// IEでは背景化してもBMPはダウンロードされてしまうようだ
+// パフォーマンス、X-Sendfileの使用とか
+// operaだとキーチェックがうまくいかない。ajaxが非同期になるのか？？
+// ajax非同期化すればopera対応なるか？
+// 幅を指定していない画像があれば警告alertや警告画像を出す機能
+// 画像の事前分割
+// 管理画面では空ファイルを作成し、それが存在している間はキーチェックをしないようにすれば？
+// 古い映画のような効果を与えてPrintScreen防止
+// 将来のバージョンとぶつからないようなちぇっく
+// ダウンロードソフト耐性チェック
+// 言語国際化
+// XP動作チェック
+// firefoxのアドオンでダウンロードを試す
+// 英語ドキュメントを先に作った方がいいのでは←日本語を充実させてから
+// ダウンロード防止効果一覧
 
 	/*
 	 * 画像保護クラス
@@ -14,7 +44,7 @@ Author URI: http://wordpress.1000sei.com
 	class Image_Protector {
 
 		// バージョン
-		private $str_varsion = "1.0";
+		private $str_varsion = "1.1";
 		// 画像ディレクトリ
 		private $str_image_url;
 		
@@ -69,15 +99,15 @@ Author URI: http://wordpress.1000sei.com
 				"do" => false,		// OnOff
 				"cover" => array(	// カバー情報
 					"uploads" => array(
-						"display" => "アップロード",
+						//"display" => "アップロード",
 						"cover" => true	// これはtrueで固定
 					),
 					"themes" => array(
-						"display" => "テーマ",
+						//"display" => "テーマ",
 						"cover" => false
 					),
 					"plugins" => array(
-						"display" => "プラグイン",
+						//"display" => "プラグイン",
 						"cover" => false
 					)
 				)
@@ -169,15 +199,15 @@ Author URI: http://wordpress.1000sei.com
 				),
 				1 => array(
 					"input_value" => "color_message",
-					"display" => "カラーメッセージ"
+					"display" => "Color"
 				),
 				2 => array(
 					"input_value" => "japanese_message",
-					"display" => "日本語メッセージ"
+					"display" => "Japanese"
 				),
 				3 => array(
 					"input_value" => "english_message",
-					"display" => "英単語メッセージ"
+					"display" => "English"
 				)
 			);
 			$init["error"]["error"] = array(
@@ -878,8 +908,8 @@ span.image-protector img {
 		public function add_menu_page_cb() {
 			// トップレベルメニュー 
 			add_menu_page(
-				'画像保護', // メニューが有効になった時に表示されるHTMLのページタイトル用テキスト。 
-				'画像保護', // 管理画面のメニュー上での表示名。 
+				__( 'Image Protector', 'image-protector' ), // メニューが有効になった時に表示されるHTMLのページタイトル用テキスト。 
+				__( 'Image Protector', 'image-protector' ), // 管理画面のメニュー上での表示名。 
 				'edit_themes', // このメニューページを閲覧・使用するために最低限必要なユーザーレベルまたはユーザーの種類と権限 。管理能力名（edit_themes等）で指定。
 				__FILE__, // メニューページのコンテンツを表示するPHPファイル。とマニュアルにあるが実態は単なるslug。 
 				array($this, 'add_menu_page_html') // メニューページにコンテンツを表示する関数。
@@ -889,10 +919,17 @@ span.image-protector img {
 ?>
 <div class="wrap">
 	<?php screen_icon('upload'); ?>
-	<h2>画像保護 image-protector ver.<?php echo $this->str_varsion ?></h2>
-	<h3>マニュアル</h3>
+	<h2>Image Protector ver.<?php echo $this->str_varsion ?></h2>
 	<div>
-		<a href="http://wordpress.1000sei.com/image-protector/">http://wordpress.1000sei.com/image-protector/</a>
+		<strong><?php _e( 'Docs', 'image-protector' ) ?></strong>
+		<br />
+		English: <a href="http://wordpress.1000sei.com/image-protector/">http://wordpress.1000sei.com/image-protector/</a>
+		<br />
+		Japanese: <a href="http://wordpress.1000sei.com/ja/image-protector/">http://wordpress.1000sei.com/ja/image-protector/</a>
+		<br />
+		<strong><?php _e( 'Support', 'image-protector' ) ?></strong>
+		<br />
+		<a href="http://wordpress.org/support/plugin/image-protector">http://wordpress.org/support/plugin/image-protector</a>
 	</div>
 <?php
 			if (isset($_POST['image-protector'])) {
@@ -956,7 +993,7 @@ span.image-protector img {
 								//echo $str_htaccess;
 								//echo "</pre>";
 								if (!$fp = fopen("../wp-content/.htaccess", "w")) {
-									echo "書き込み失敗";
+									echo __( 'write error', 'image-protector' ); //"書き込み失敗";
 								}
 								fwrite($fp, $str_htaccess);
 								fclose($fp);
@@ -1099,7 +1136,8 @@ span.image-protector img {
 		<div class="param_area">
 			<form action="" method="post">
 				<div class="param_contents">
-					<h3>.htaccessで制限</h3>
+					<?php /* .htaccessで制限 */ ?>
+					<h3><?php _e( 'use .htaccess', 'image-protector' ) ?></h3>
 					<?php wp_nonce_field('my_param_action', 'my_param_nonce'); ?>
 					<input type="hidden" name="image-protector" value="htaccess">
 					<?php
@@ -1111,24 +1149,31 @@ span.image-protector img {
 						}
 						*/
 						if ( is_multisite() ) {
-							echo "<span class='bad'>！マルチサイトでは機能しません。</span><br />";
+							echo "<span class='bad'>" . __( '! As multisite, .htaccess doesn\'t work.', 'image-protector' ) . "</span><br />";
 						}
 					?>
 					<?php $this->add_on_off_html($_SESSION["image-protector"]["htaccess"]["do"]) ?>
 					<p>
-						<span class="good">セッションチェックやその他以下のチェックを可能にします。</span>
-						<span class="bad">ですが有効化時は管理画面のビジュアルエディタなどが使えません。</span>
-						WordPressのインストールディレクトリではなく、その中のwp-contentディレクトリに作られます。
+						<?php _e( 'Visual Editor doesn\'t work well when this function is activated.', 'image-protector' ) ?>
+						<?php _e( 'You need to stop this option when you use Visual Editor.', 'image-protector' ) ?>
+						<?php _e( '.htaccess file is made at wp-content directory.', 'image-protector' ) ?>
 					</p>
-					<h4>制限範囲</h4>
+					<h4><?php _e( 'limit range', 'image-protector' ) ?></h4>
 					<?php
-						echo "<input type='hidden' name='cover[]' value='uploads'>";
-						foreach ($_SESSION["image-protector"]["htaccess"]["cover"] as $k => $v) {
-							$str_checked = ($v["cover"])?"checked":"";
-							$str_disabled = ($k == "uploads")?"disabled":"";	// uploadsの保護は必須とする
-							echo "<input type='checkbox' name='cover[]' value='{$k}' $str_checked $str_disabled> {$v["display"]} ({$k}ディレクトリ) ";
-						}
+						$cover = $_SESSION["image-protector"]["htaccess"]["cover"];
 					?>
+					/wordpress<br />
+						&nbsp;&nbsp;&nbsp;&nbsp;/wp-admin<br />
+						&nbsp;&nbsp;&nbsp;&nbsp;/wp-content<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/languages<br />
+							<?php $str_checked = ($cover["plugins"]["cover"])?"checked":""; ?>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/plugins<input type='checkbox' name='cover[]' value='plugins' <?php echo $str_checked ?>><br />
+							<?php $str_checked = ($cover["themes"]["cover"])?"checked":""; ?>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/themes<input type='checkbox' name='cover[]' value='themes' <?php echo $str_checked ?>><br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/upgrade<br />
+							<input type='hidden' name='cover[]' value='uploads'>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/uploads<input type='checkbox' name='cover[]' value='uploads' checked disabled><br />
+						&nbsp;&nbsp;&nbsp;&nbsp;/wp-includes<br />
 				</div>
 				<div class="submit_button">
 					<?php submit_button(); ?>
@@ -1143,13 +1188,12 @@ span.image-protector img {
 			<div class="param_area <?php echo $str_dont_htaccess_class ?>">
 				<form action="" method="post">
 					<div class="param_contents">
-						<h3>リファラーチェック</h3>
+						<?php /* リファラーチェック */ ?>
+						<h3><?php _e( 'referer check', 'image-protector' ) ?></h3>
 						<?php wp_nonce_field('my_param_action', 'my_param_nonce'); ?>
 						<input type="hidden" name="image-protector" value="referer">
 						<?php $this->add_on_off_html($_SESSION["image-protector"]["referer"]["do"]) ?>
 						<p>
-							<span class="good">画像へのブックマーク、URL直打ち、直リンクなどを防ぎます。</span>
-							<span class="bad">ですがリファラーは容易に偽装されます。</span>
 						</p>
 					</div>
 					<div class="submit_button">
@@ -1161,15 +1205,14 @@ span.image-protector img {
 			<div class="param_area <?php echo $str_dont_htaccess_class ?>">
 				<form action="" method="post">
 					<div class="param_contents">
-						<h3>ユーザーエージェントチェック</h3>
+						<?php /* ユーザーエージェントチェック */ ?>
+						<h3><?php _e( 'user agent check', 'image-protector' ) ?></h3>
 						<?php wp_nonce_field('my_param_action', 'my_param_nonce'); ?>
 						<input type="hidden" name="image-protector" value="user_agent">
 						<?php $this->add_on_off_html($_SESSION["image-protector"]["user_agent"]["do"]) ?>
 						<p>
-							<span class="good">ホームページダウンロードソフトの使用などを防ぎます。</span>
-							<span class="bad">ですがユーザーエージェントは容易に偽装されます。</span>
 						</p>
-						<h4>はじくユーザーエージェントに含まれる文字（改行区切り）</h4>
+						<h4><?php _e( 'block user agent(divide by Enter)', 'image-protector' ) ?></h4>
 						<?php
 							$str_user_agents = trim($_SESSION["image-protector"]["user_agent"]["deny"]);
 						?>
@@ -1184,19 +1227,18 @@ span.image-protector img {
 			<div class="param_area <?php echo $str_dont_htaccess_class ?>">
 				<form action="" method="post">
 					<div class="param_contents">
-						<h3>タイムアウトチェック</h3>
+						<?php /* タイムアウトチェック */ ?>
+						<h3><?php _e( 'timeout check', 'image-protector' ) ?></h3>
 						<?php wp_nonce_field('my_param_action', 'my_param_nonce'); ?>
 						<input type="hidden" name="image-protector" value="time_out">
 						<?php $this->add_on_off_html($_SESSION["image-protector"]["time_out"]["do"]) ?>
 						<p>
-							<span class="good">偽装工作を許す時間を制限できます。</span>
-							<span class="bad">ですがブラウザの戻るボタンの操作時に表示がおかしくなる事があります。低速回線では悪意がない方の場合でも画像を表示しきる前にタイムアウトしてしまう恐れがあります。</span>
 						</p>
-						<h4>タイムアウト秒数</h4>
+						<h4><?php _e( 'timeout second', 'image-protector' ) ?></h4>
 						<select name="limit" style="width:50px">
 							<?php $this->add_09option_html($_SESSION["image-protector"]["time_out"]["limit"]) ?>
 						</select>
-						秒
+						<?php _e( 'second', 'image-protector' ) ?>
 					</div>
 					<div class="submit_button">
 						<?php submit_button(); ?>
@@ -1207,13 +1249,12 @@ span.image-protector img {
 			<div class="param_area <?php echo $str_dont_htaccess_class ?>">
 				<form action="" method="post">
 					<div class="param_contents">
-						<h3>キーチェック</h3>
+						<?php /* キーチェック */ ?>
+						<h3><?php _e( 'key check', 'image-protector' ) ?></h3>
 						<?php wp_nonce_field('my_param_action', 'my_param_nonce'); ?>
 						<input type="hidden" name="image-protector" value="key">
 						<?php $this->add_on_off_html($_SESSION["image-protector"]["key"]["do"]) ?>
 						<p>
-							<span class="good">画像にワンタイムパスワードもどきを設定します。</span>
-							<span class="bad">ですがoperaでは正しく機能しません。</span>
 						</p>
 					</div>
 					<div class="submit_button">
@@ -1225,32 +1266,34 @@ span.image-protector img {
 			<div class="param_area <?php echo $str_dont_htaccess_class ?>">
 				<form action="" method="post">
 					<div class="param_contents">
-						<h3>分割</h3>
+						<?php /* 分割 */ ?>
+						<h3><?php _e( 'division', 'image-protector' ) ?></h3>
 						<?php wp_nonce_field('my_param_action', 'my_param_nonce'); ?>
 						<input type="hidden" name="image-protector" value="division">
 						<?php
 							// GD拡張モジュールチェック
 							if(!extension_loaded('gd')) {
-								echo "<span class='bad'>！GD拡張モジュールが使えないので有効化できません。</span><br />";
+								// ！GD拡張モジュールが使えないので有効化できません。
+								echo "<span class='bad'><?php _e( 'can\'t activate, need GD module.', 'image-protector' ) ?></span><br />";
 							}
 						?>
 						<?php $this->add_on_off_html($_SESSION["image-protector"]["division"]["do"]) ?>
 						<p>
-							<span class="good">画像を分割表示し、全体の画像をダウンロードする手間をかけさせることができます。</span>
-							<span class="bad">ですがサーバーの負荷が高まります。GIF, BMPには未対応です。</span>
 						</p>
-						<h4>処理画像ファイル名のプリフィックス</h4>
-						この文字で始まる画像ファイルを分割表示対象とします。全ての画像を対象にする場合は空欄にしてください。<br />
+						<h4><?php _e( 'The prefix of the target file.', 'image-protector' ) ?></h4>
+						<?php _e( 'Images those have this prefix are divided.', 'image-protector' ) ?>
+						<?php _e( 'keep it void if all images are targets.', 'image-protector' ) ?>
+						<br />
 						<input type="text" name="prefix" value="<?php echo $_SESSION["image-protector"]["division"]["prefix"]; ?>" />
-						<h4>分割数</h4>
+						<h4><?php _e( 'How many pieces', 'image-protector' ) ?></h4>
 						<select name="cols" style="width:50px">
 							<?php $this->add_09option_html($_SESSION["image-protector"]["division"]["cols"]) ?>
 						</select>
-						列
+						<?php _e( 'cols', 'image-protector' ) ?>
 						<select name="rows" style="width:50px">
 							<?php $this->add_09option_html($_SESSION["image-protector"]["division"]["rows"]) ?>
 						</select>
-						行
+						<?php _e( 'rows', 'image-protector' ) ?>
 					</div>
 					<div class="submit_button">
 						<?php submit_button(); ?>
@@ -1262,13 +1305,12 @@ span.image-protector img {
 		<div class="param_area">
 			<form action="" method="post">
 				<div class="param_contents">
-					<h3>ブラウザ機能チェック</h3>
+					<?php /* ブラウザ機能チェック */ ?>
+					<h3><?php _e( 'browser function check', 'image-protector' ) ?></h3>
 					<?php wp_nonce_field('my_param_action', 'my_param_nonce'); ?>
 					<input type="hidden" name="image-protector" value="browser_function">
 					<?php $this->add_on_off_html($_SESSION["image-protector"]["browser_function"]["do"]) ?>
 					<p>
-						<span class="good">ユーザーエージェントではなくブラウザの機能をみて有効なクライアントかを判別することによりユーザーエージェント偽装を困難にさせます。</span>
-						<span class="bad">ですが将来出てくる新しいブラウザを正しく判別できるかがわかりません。</span>
 					</p>
 				</div>
 				<div class="submit_button">
@@ -1280,13 +1322,12 @@ span.image-protector img {
 		<div class="param_area">
 			<form action="" method="post">
 				<div class="param_contents">
-					<h3>右クリック禁止</h3>
+					<?php /* 右クリック禁止 */ ?>
+					<h3><?php _e( 'forbid right click', 'image-protector' ) ?></h3>
 					<?php wp_nonce_field('my_param_action', 'my_param_nonce'); ?>
 					<input type="hidden" name="image-protector" value="right_click">
 					<?php $this->add_on_off_html($_SESSION["image-protector"]["right_click"]["do"]) ?>
 					<p>
-						<span class="good">右クリックを禁止し、画像ダウンロードに繋がる操作を困難にさせます。</span>
-						<span class="bad">ですがその他の便利な右クリックメニューも使えなくなり不便です。</span>
 					</p>
 				</div>
 				<div class="submit_button">
@@ -1298,13 +1339,12 @@ span.image-protector img {
 		<div class="param_area">
 			<form action="" method="post">
 				<div class="param_contents">
-					<h3>プリントスクリーン防止</h3>
+					<?php /* プリントスクリーン防止 */ ?>
+					<h3><?php _e( 'forbid print screen', 'image-protector' ) ?></h3>
 					<?php wp_nonce_field('my_param_action', 'my_param_nonce'); ?>
 					<input type="hidden" name="image-protector" value="print_screen">
 					<?php $this->add_on_off_html($_SESSION["image-protector"]["print_screen"]["do"]) ?>
 					<p>
-						<span class="good">プリントスクリーンボタン[PrtSc]を無意味なものとします。</span>
-						<span class="bad">ですがIEでしか効果が無く、確認ウィンドウも出てきてしまうようです。</span>
 					</p>
 				</div>
 				<div class="submit_button">
@@ -1316,13 +1356,12 @@ span.image-protector img {
 		<div class="param_area">
 			<form action="" method="post">
 				<div class="param_contents">
-					<h3>透明フィルター</h3>
+					<?php /* 透明フィルター */ ?>
+					<h3><?php _e( 'transparent filter', 'image-protector' ) ?></h3>
 					<?php wp_nonce_field('my_param_action', 'my_param_nonce'); ?>
 					<input type="hidden" name="image-protector" value="transparent">
 					<?php $this->add_on_off_html($_SESSION["image-protector"]["transparent"]["do"]) ?>
 					<p>
-						<span class="good">透明な画像でかぶせて対象の画像の選択を困難なものにします。</span>
-						<span class="bad">ですがソースを覗かれたら意味がありません。</span>
 					</p>
 				</div>
 				<div class="submit_button">
@@ -1334,13 +1373,12 @@ span.image-protector img {
 		<div class="param_area">
 			<form action="" method="post">
 				<div class="param_contents">
-					<h3>劣化処理</h3>
+					<?php /* 劣化処理 */ ?>
+					<h3><?php _e( 'deterioration', 'image-protector' ) ?></h3>
 					<?php wp_nonce_field('my_param_action', 'my_param_nonce'); ?>
 					<input type="hidden" name="image-protector" value="deterioration">
 					<?php $this->add_on_off_html($_SESSION["image-protector"]["deterioration"]["do"]) ?>
 					<p>
-						<span class="good">縁をぼかしたり退色フィルターをかけてアナログ撮影したような効果を画像に与え、プリントスクリーンでのキャプチャに手間をかけさせます。</span>
-						<span class="bad">ですがCSSをOffにされたりCSS3未対応ブラウザだと意味がありません。</span>
 					</p>
 				</div>
 				<div class="submit_button">
@@ -1352,13 +1390,12 @@ span.image-protector img {
 		<div class="param_area">
 			<form action="" method="post">
 				<div class="param_contents">
-					<h3>背景画像化</h3>
+					<?php /* 背景画像化 */ ?>
+					<h3><?php _e( 'background', 'image-protector' ) ?></h3>
 					<?php wp_nonce_field('my_param_action', 'my_param_nonce'); ?>
 					<input type="hidden" name="image-protector" value="background">
 					<?php $this->add_on_off_html($_SESSION["image-protector"]["background"]["do"]) ?>
 					<p>
-						<span class="good">imgタグのsrcからimgタグのbackgroundに置き換えて画像ダウンロードを困難にします。</span>
-						<span class="bad">ですが幅と高さを明示して指定する必要があり、かつ伸縮に非対応です。</span>
 					</p>
 				</div>
 				<div class="submit_button">
@@ -1370,13 +1407,12 @@ span.image-protector img {
 		<div class="param_area">
 			<form action="" method="post">
 				<div class="param_contents">
-					<h3>メディアリンク</h3>
+					<?php /* メディアリンク */ ?>
+					<h3><?php _e( 'media link', 'image-protector' ) ?></h3>
 					<?php wp_nonce_field('my_param_action', 'my_param_nonce'); ?>
 					<input type="hidden" name="image-protector" value="media_link">
 					<?php $this->add_on_off_html($_SESSION["image-protector"]["media_link"]["do"]) ?>
 					<p>
-						<span class="good">添付ファイル投稿ページからの画像へのリンクを剥ぎ取ります。</span>
-						<span class="bad">ですがURL直打ちをされたら意味がありません。</span>
 					</p>
 				</div>
 				<div class="submit_button">
@@ -1388,13 +1424,12 @@ span.image-protector img {
 		<div class="param_area">
 			<form action="" method="post">
 				<div class="param_contents">
-					<h3>Javascript, CSS難読化</h3>
+					<?php /* Javascript, CSS難読化 */ ?>
+					<h3><?php _e( 'js css obfuscated', 'image-protector' ) ?></h3>
 					<?php wp_nonce_field('my_param_action', 'my_param_nonce'); ?>
 					<input type="hidden" name="image-protector" value="js_css_obfuscated">
 					<?php $this->add_on_off_html($_SESSION["image-protector"]["js_css_obfuscated"]["do"]) ?>
 					<p>
-						<span class="good">当プラグインに関するものだけを難読化し解析されにくくします。</span>
-						<span class="bad">ですが当プラグイン自体が公開されているのが難点です。</span>
 					</p>
 				</div>
 				<div class="submit_button">
@@ -1406,22 +1441,19 @@ span.image-protector img {
 		<div class="param_area">
 			<form action="" method="post">
 				<div class="param_contents">
-					<h3>エラー表示</h3>
+					<?php /* エラー表示 */ ?>
+					<h3><?php _e( 'how to display error message.', 'image-protector' ) ?></h3>
 					<?php wp_nonce_field('my_param_action', 'my_param_nonce'); ?>
 					<input type="hidden" name="image-protector" value="error">
 					<?php
 						echo $this->add_error_message_type_html(0);
-						echo "<br />";
-						echo "<span class='good'>推奨</span>";
+						echo " <span class='good'>" . __( 'recommend', 'image-protector' ) . "</span>";
 						echo "<br />";
 						echo "<img src='{$this->str_image_url}/loading.gif' />";
-						echo "<br />";
 						echo "<br />";
 						echo $this->add_error_message_type_html(1);
 						echo $this->add_error_message_type_html(2);
 						echo $this->add_error_message_type_html(3);
-						echo "<br />";
-						echo "<span class='bad'>障害原因追求時等のみに使用すべきです。画像が表示されない理由をわざわざ他人に教えてやる必要はありません。</span>";
 						echo "<br />";
 						foreach ($_SESSION["image-protector"]["error"]["error"] as $k => $v) {
 							//echo $v["jp"];
@@ -1445,7 +1477,8 @@ span.image-protector img {
 		<div class="param_area">
 			<form action="" method="post">
 				<div class="param_contents">
-					<h3>設定保持情報</h3>
+					<?php /* 設定保持情報 */ ?>
+					<h3><?php _e( 'db data', 'image-protector' ) ?></h3>
 					<textarea><?php echo esc_html(var_export($_SESSION["image-protector"], true)); ?></textarea>
 				</div>
 				<div class="submit_button">
@@ -1456,7 +1489,8 @@ span.image-protector img {
 		<div class="param_area">
 			<form action="" method="post">
 				<div class="param_contents">
-					<h3>設定初期化</h3>
+					<?php /* 設定初期化 */ ?>
+					<h3><?php _e( 'initialize', 'image-protector' ) ?></h3>
 					<?php wp_nonce_field('my_param_action', 'my_param_nonce'); ?>
 					<input type="hidden" name="image-protector" value="init">
 				</div>
@@ -1475,11 +1509,11 @@ span.image-protector img {
 			<div>
 				<label style="border:solid 1px #FF9999;<?php echo (!$is_on)?'background-color:#FF9999;':''; ?>">
 					<input type="radio" name="do_check" value="off" <?php echo (!$is_on)?'checked':''; ?> />
-					停止
+					<?php _e( 'stop', 'image-protector' ) ?>
 				</label>
 				<label style="border:solid 1px #9999FF;<?php echo ($is_on)?'background-color:#9999FF;':''; ?>">
 					<input type="radio" name="do_check" value="on" <?php echo ($is_on)?'checked':''; ?> />
-					有効化
+					<?php _e( 'activate', 'image-protector' ) ?>
 				</label>
 			</div>
 <?php
@@ -1511,11 +1545,13 @@ span.image-protector img {
 			if (file_exists("../wp-content/.htaccess")) {
 				// バックアップ
 				if (!copy("../wp-content/.htaccess", "../wp-content/plugins/image-protector/htaccess/" . time() . ".htaccess.php")) {
-					echo ".htaccessバックアップ失敗";
+					//echo ".htaccessバックアップ失敗";
+					echo __( 'failure backup .htaccess', 'image-protector' );
 				}
 				// 既存のhtaccessを削除
 				if (!unlink("../wp-content/.htaccess")) {
-					echo ".htaccess削除失敗";
+					//echo ".htaccess削除失敗";
+					echo __( 'failure delete .htaccess', 'image-protector' );
 				} 
 			}
 		}
@@ -1533,6 +1569,9 @@ span.image-protector img {
 //エラー表示
 //ini_set( 'display_errors', "1" );
 //ini_set('error_reporting', E_ALL);
+
+// プラグイン用の国際化用ファイル（MOファイル）をロード
+load_plugin_textdomain('image-protector', false, basename(dirname(__FILE__)).'/languages' );
 
 // マルチサイトだとなぜか読み込まれないので一応明示的に指定
 wp_enqueue_script('jquery');

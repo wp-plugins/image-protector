@@ -3,7 +3,7 @@ Contributors: Hirofumi Ohta
 Tags: image, images, download, photo, picture
 Requires at least: 3.4
 Tested up to: 3.4.2
-Stable tag: 1.0
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,6 +26,9 @@ That's all.
 1. screenshot-1.png 
 
 == Changelog ==
+
+= 1.1 =
+* Internationalized. made po and mo.
 
 = 1.0 =
 
